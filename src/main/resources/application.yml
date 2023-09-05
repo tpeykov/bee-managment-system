@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        check-nullability: true
+    show-sql: true
+bees:
+  security:
+    authentication:
+      jwt:
+        # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
+        base64-secret: NjM1Y2E3OTlkZDQ5Yzc0ZGIxMmQ1ZWFkNDEzMmRjOTJlZDAzYWRjNGJkMjUwMTg1YjMyNDRmZGQ3N2FiYjgxZTA4YzE1NmJhNjdmZTFhMzg3ZTU3YThiMjJkZDY2YWI1NjllMmFhYzY1MDczMzQ2OTRjNzkxMmY1MzBjZmEzYTE=
+        # Token is valid 30 days
+        token-validity-in-seconds: 2592000
+        # Token is valid 6 months
+        token-validity-in-seconds-for-remember-me: 15780000
+  cors:
+    allowed-origins: 'http://localhost:3001 ,http://127.0.0.1:3001, http://localhost:3000 ,http://127.0.0.1:3000, http://192.168.1.199:3000, http://10.16.6.33:3000, http:/172.20.10.2:3000, http:/192.168.0.141:3000'
+    # Enable CORS when running in GitHub Codespaces
+    allowed-origin-patterns: 'https://*.githubpreview.dev'
+    allowed-methods: '*'
+    allowed-headers: '*'
+    exposed-headers: "Authorization,Link,X-Total-Count,X-weatherTrip-alert,X-weatherTrip-error,X-weatherTrip-params"
+    allow-credentials: true
+    max-age: 1800
