@@ -1,12 +1,13 @@
 import jwt_decode from "jwt-decode";
-
-import axios from "axios";
 import {JWT_LOCAL_STORAGE_KEY} from "../constants";
 
+export const getAuthToken = () => localStorage.getItem(JWT_LOCAL_STORAGE_KEY);
 
 export const storeAuthToken = (token) => {
     localStorage.setItem(JWT_LOCAL_STORAGE_KEY, token);
 };
+
+export const removeAuthToken = () => localStorage.removeItem(JWT_LOCAL_STORAGE_KEY);
 
 export const checkIsUserAuthenticated = () => {
     const token = localStorage.getItem(JWT_LOCAL_STORAGE_KEY);

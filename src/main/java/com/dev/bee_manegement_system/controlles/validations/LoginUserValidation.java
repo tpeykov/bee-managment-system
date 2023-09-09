@@ -10,7 +10,7 @@ import lombok.Setter;
 public class LoginUserValidation {
     @NotNull
     @Size(min = 3, max = 50)
-    private String username;
+    private String uic;
 
     @NotNull
     @Size(min = 4, max = 50)

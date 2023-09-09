@@ -1,6 +1,7 @@
 package com.dev.bee_manegement_system.domain.entities;
 
 import com.dev.bee_manegement_system.domain.constants.Constants;
+import com.dev.bee_manegement_system.domain.enums.UserType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -16,8 +17,8 @@ import org.hibernate.annotations.GenericGenerator;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-
 
 @Entity
 @Getter
@@ -36,6 +37,13 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Size(min = 1, max = 50)
     @Column(length = 50, unique = true)
     private String username;
+
+    @Size(min = 5, max = 30)
+    @Column(length = 50, unique = true)
+    private String uic;
+
+    @Enumerated(EnumType.STRING)
+    private UserType type;
 
     @Email
     @Size(min = 5, max = 254)
@@ -71,6 +79,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "reset_date")
     private Instant resetDate = null;
 
+    @OneToMany(mappedBy = "author")
+    private List<Poster> posters;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
@@ -82,5 +92,4 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
-
 }

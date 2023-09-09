@@ -6,4 +6,6 @@ public final class Constants {
     public static final int PASSWORD_MAX_LENGTH = 50;
     public static final int USERNAME_MIN_SIZE = 5;
     public static final int USERNAME_MAX_SIZE = 20;
+    public static final int UIC_MAX_SIZE = 20;
+    public static final int UIC_MIN_SIZE = 20;
 }

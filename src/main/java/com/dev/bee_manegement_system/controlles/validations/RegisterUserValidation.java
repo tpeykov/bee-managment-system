@@ -11,12 +11,14 @@ import javax.validation.constraints.Size;
 
 @Getter @Setter
 public class RegisterUserValidation {
-    private Long id;
-
     @NotBlank
     @Pattern(regexp = Constants.USERNAME_REGEX)
     @Size(min = Constants.USERNAME_MIN_SIZE, max = Constants.USERNAME_MAX_SIZE)
     private String username;
+
+    @NotBlank
+    @Size(min = Constants.UIC_MIN_SIZE, max = Constants.UIC_MAX_SIZE)
+    private String uic;
 
     @Email
     @Size(min = 5, max = 254)

@@ -1,7 +1,7 @@
 .background-wrapper{
     background: #ffda6a url("../images/bee-background-wrapper.png") no-repeat center;
-    height: 640px;
-    width: 1365px;
+    height: 100%;
+    width: 100%;
     display: flex;
     justify-content: normal;
 }

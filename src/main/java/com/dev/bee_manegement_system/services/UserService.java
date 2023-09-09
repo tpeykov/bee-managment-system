@@ -64,15 +64,12 @@ public class UserService implements UserDetailsService {
                 });
 
         User newUser = new User();
+
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setUsername(user.getUsername().toLowerCase());
-        // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
-
-        if (user.getEmail() != null) {
-            newUser.setEmail(user.getEmail().toLowerCase());
-        }
-
+        newUser.setEmail(user.getEmail().toLowerCase());
+        newUser.setUic(user.getUic());
         newUser.setActivated(true);
 
         userRepository.save(newUser);

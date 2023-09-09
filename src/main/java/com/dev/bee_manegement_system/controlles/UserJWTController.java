@@ -1,6 +1,8 @@
 package com.dev.bee_manegement_system.controlles;
 
 import com.dev.bee_manegement_system.controlles.validations.LoginUserValidation;
+import com.dev.bee_manegement_system.domain.entities.User;
+import com.dev.bee_manegement_system.repositories.UserRepository;
 import com.dev.bee_manegement_system.security.JWTFilter;
 import com.dev.bee_manegement_system.security.TokenProvider;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,11 +28,14 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 public class UserJWTController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
+    private final UserRepository userRepository;
 
     @PostMapping("/authenticate")
     public ResponseEntity authorize(@Valid @RequestBody LoginUserValidation loginUser) {
+
+        User user = this.userRepository.getUserByUic(loginUser.getUic()).orElse(null);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                loginUser.getUsername(),
+                user != null ? user.getUsername() : null,
                 loginUser.getPassword()
         );
 
