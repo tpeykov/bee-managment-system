@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,5 +36,23 @@ public class PosterService {
     public List<PublicPosterDTO> getAll() {
         return this.posterRepository.getPosterByStatus(PosterStatus.ACTIVE)
                                     .stream().map(poster -> this.modelMapper.map(poster, PublicPosterDTO.class)).toList();
+    }
+
+    public Poster getByUuid(String posterUuid) {
+       return posterRepository.findByUuid(posterUuid).orElseThrow();
+    }
+
+    public void save(Poster poster) {
+        posterRepository.save(poster);
+    }
+
+    public Poster getPoster(String uuid) {
+        Poster poster = posterRepository.findByUuid(uuid).orElseThrow();
+
+        if (!poster.getStatus().equals(PosterStatus.INACTIVE)){
+            // TODO
+        }
+
+        return poster;
     }
 }

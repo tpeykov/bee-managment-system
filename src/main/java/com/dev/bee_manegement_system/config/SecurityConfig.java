@@ -49,6 +49,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .requestMatchers("/api/authenticate").permitAll()
                 .requestMatchers("/api/register").permitAll()
+                .requestMatchers("/api/offers").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .httpBasic()

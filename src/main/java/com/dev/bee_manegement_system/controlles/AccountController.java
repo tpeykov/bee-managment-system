@@ -1,11 +1,14 @@
 package com.dev.bee_manegement_system.controlles;
 
+import com.dev.bee_manegement_system.controlles.dtoes.ProfileInformationDTO;
 import com.dev.bee_manegement_system.controlles.validations.RegisterUserValidation;
 import com.dev.bee_manegement_system.services.UserService;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.dev.bee_manegement_system.domain.entities.User;
 
@@ -23,5 +26,10 @@ public class AccountController {
         User user = this.userService.registerUser(validationRegisterUser, validationRegisterUser.getPassword());
 
         log.info("{}", user);
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<ProfileInformationDTO> getProfileInformation() {
+        return ResponseEntity.ok(userService.getInformation());
     }
 }

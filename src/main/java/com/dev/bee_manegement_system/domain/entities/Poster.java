@@ -3,6 +3,7 @@ package com.dev.bee_manegement_system.domain.entities;
 import com.dev.bee_manegement_system.domain.enums.PosterStatus;
 import com.dev.bee_manegement_system.domain.enums.PosterType;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -10,6 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Getter
@@ -40,4 +42,7 @@ public class Poster extends AbstractAuditingEntity implements Serializable {
 
     private Instant validTo;
     // TODO add region entity
+
+    @OneToMany
+    private List<Offer> offers;
 }

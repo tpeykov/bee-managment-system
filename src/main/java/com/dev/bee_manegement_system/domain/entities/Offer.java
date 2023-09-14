@@ -7,6 +7,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.util.Date;
 
 
 @Entity
@@ -27,7 +29,7 @@ public class Offer extends AbstractAuditingEntity implements Serializable {
 
     private String verifyDocument;
 
-    private Instant validTo;
+    private Date validTo;
 
     @ManyToOne
     @JoinColumn(name = "author_uuid", referencedColumnName = "uuid")

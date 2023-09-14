@@ -82,6 +82,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @OneToMany(mappedBy = "author")
     private List<Poster> posters;
 
+    @OneToMany(mappedBy = "author")
+    private List<Offer> offers;
+
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

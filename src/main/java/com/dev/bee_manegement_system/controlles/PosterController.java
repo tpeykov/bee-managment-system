@@ -3,6 +3,7 @@ package com.dev.bee_manegement_system.controlles;
 import com.dev.bee_manegement_system.controlles.dtoes.PublicPosterDTO;
 import com.dev.bee_manegement_system.controlles.validations.CreatePosterValidation;
 import com.dev.bee_manegement_system.domain.constants.Authorities;
+import com.dev.bee_manegement_system.domain.entities.Poster;
 import com.dev.bee_manegement_system.services.PosterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,11 @@ public class PosterController {
     public ResponseEntity<List<PublicPosterDTO>> getAllPosters() {
         List<PublicPosterDTO> results = this.posterService.getAll();
         return ResponseEntity.status(HttpStatus.CREATED).body(results);
+    }
+
+    @GetMapping("/posters/{uuid}")
+    public ResponseEntity<Poster> getPoster(@PathVariable String uuid) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.posterService.getPoster(uuid));
     }
 
 
