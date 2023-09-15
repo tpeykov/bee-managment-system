@@ -28,17 +28,9 @@ function App() {
                             <Route path='register' element={<RegisterView/>}></Route>
                         </Route>
                         <Route element={<PrivateRoutes/>} exact>
-                            <Route element={<RoleRoutes role={USER_ROLES.MERCHANT} />} exact>
-                                <Route path='/' element={<MerchantSearchView/>}></Route>
-                                <Route path='/profile' element={<ProfileView/>}></Route>
-                            </Route>
-                            <Route element={<RoleRoutes role={USER_ROLES.MANUFACTURER} />} exact>
-                                <Route path='/' element={<ManufactureSearchView/>}></Route>
-                                <Route path='/create-poster' element={<CreatePosterView/>}></Route>
-                                <Route path='/profile' element={<ProfileView/>}></Route>
-                            </Route>
+                            <Route path='/' element={<MerchantSearchView/>}></Route>
+                            <Route path='/profile' element={<ProfileView/>}></Route>
                         </Route>
-
                         <Route path='*' element={<NotFoundView/>}></Route>
                     </Route>
                 </Routes>

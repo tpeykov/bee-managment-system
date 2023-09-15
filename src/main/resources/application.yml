@@ -1,12 +1,11 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/bees-management-system
     username: postgres
-    password: postgres
+    password: password
   jpa:
     hibernate:
       ddl-auto: update
-
 
 bees:
   security:

@@ -27,6 +27,7 @@ export const registerUser = (data) => {
             email: data.get('email'),
             uic: data.get('uic'),
             password: data.get('password'),
+            role: data.get('role'),
         }
     })
 }

@@ -5,6 +5,10 @@ import '../css/forms-style.css'
 import {registerUser} from "../shared/services/user.service";
 import NotificationContext from "../shared/contexts/notification.context";
 import {useNavigate} from "react-router-dom";
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 function RegisterView() {
     const {setNotification} = useContext(NotificationContext);
@@ -67,6 +71,13 @@ function RegisterView() {
                                 className="form-control"
                                 placeholder="Enter password"
                             />
+                        </div>
+
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                            <select name="role">
+                                <option value="ROLE_MANUFACTURER">Manufacturer</option>
+                                <option value="ROLE_MERCHANT">Merchant</option>
+                            </select>
                         </div>
 
                         <div className="d-grid">

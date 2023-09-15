@@ -7,7 +7,6 @@ import com.dev.bee_manegement_system.controlles.errors.EmailAlreadyUsedException
 import com.dev.bee_manegement_system.controlles.errors.UsernameAlreadyUsedException;
 import com.dev.bee_manegement_system.controlles.validations.RegisterUserValidation;
 import com.dev.bee_manegement_system.domain.constants.Authorities;
-import com.dev.bee_manegement_system.domain.entities.Authority;
 import com.dev.bee_manegement_system.domain.entities.User;
 import com.dev.bee_manegement_system.domain.entities.UserAuthority;
 import com.dev.bee_manegement_system.repositories.UserAuthorityRepository;
@@ -25,6 +24,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -63,7 +63,8 @@ public class UserService implements UserDetailsService {
         return createSpringSecurityUser(lowercaseUsername, user.get());
     }
 
-    public User registerUser(RegisterUserValidation user, String password) {
+    @Transactional
+    public User registerUser(@Valid RegisterUserValidation user, String password) {
         this.userRepository
                 .findOneByUsername(user.getUsername().toLowerCase())
                 .ifPresent(existingUser -> {
@@ -87,7 +88,14 @@ public class UserService implements UserDetailsService {
 
         var savedUser = userRepository.save(newUser);
 
-        userAuthorityRepository.save(new UserAuthority(savedUser.getUuid(), Authorities.USER));
+        if (user.getRole().equals(Authorities.ROLE_MANUFACTURER)) {
+            userAuthorityRepository.save(new UserAuthority(savedUser.getUuid(), Authorities.ROLE_MANUFACTURER.name()));
+        } else if (user.getRole().equals(Authorities.ROLE_MERCHANT)) {
+            userAuthorityRepository.save(new UserAuthority(savedUser.getUuid(), Authorities.ROLE_MERCHANT.name()));
+        } else {
+            throw new RuntimeException("Wrong role");
+        }
+
         return savedUser;
     }
 

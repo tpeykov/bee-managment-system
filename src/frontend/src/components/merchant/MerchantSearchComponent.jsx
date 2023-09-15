@@ -8,23 +8,12 @@ import {
     Typography,
     Unstable_Grid2 as Grid
 } from '@mui/material';
-import {CompaniesSearch} from "../components/CompaniesSearch";
-import {PosterCard} from "../components/PosterCard";
-import {useEffect, useState} from "react";
-import {retrieveAllPosters} from "../shared/services/poster.service";
+import {CompaniesSearch} from "../CompaniesSearch";
+import {PosterCard} from "../PosterCard";
 
-function MerchantSearchView() {
-    const [posters, updatePosters] = useState([]);
 
-    useEffect(() => {
-        (async () => {
-            const results = await retrieveAllPosters();
-            updatePosters(results.data);
-        })();
-    }, []);
-
-    return (
-        <Box
+function MerchantSearchComponent({ posters }) {
+    return (<Box
             component="main"
             sx={{
                 flexGrow: 1,
@@ -91,9 +80,8 @@ function MerchantSearchView() {
                     </Box>
                 </Stack>
             </Container>
-        </Box>
-    );
+    </Box>)
+
 }
 
-export default MerchantSearchView;
-
+export default MerchantSearchComponent;

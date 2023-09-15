@@ -4,7 +4,6 @@ import com.dev.bee_manegement_system.controlles.dtoes.ProfileInformationDTO;
 import com.dev.bee_manegement_system.controlles.validations.RegisterUserValidation;
 import com.dev.bee_manegement_system.services.UserService;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

@@ -1,5 +1,6 @@
 package com.dev.bee_manegement_system.controlles.validations;
 
+import com.dev.bee_manegement_system.domain.constants.Authorities;
 import com.dev.bee_manegement_system.domain.constants.Constants;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,4 +27,6 @@ public class RegisterUserValidation {
 
     @Size(min = Constants.PASSWORD_MIN_LENGTH, max = Constants.PASSWORD_MAX_LENGTH)
     private String password;
+
+    private Authorities role;
 }
