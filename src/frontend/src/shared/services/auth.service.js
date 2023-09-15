@@ -18,3 +18,7 @@ export const checkIsUserAuthenticated = () => {
 
     return currentTimeInSeconds < decoded.exp;
 };
+
+export const getUserDetails = () => {
+    return jwt_decode(getAuthToken());
+}

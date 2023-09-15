@@ -13,7 +13,7 @@ import {PosterCard} from "../components/PosterCard";
 import {useEffect, useState} from "react";
 import {retrieveAllPosters} from "../shared/services/poster.service";
 
-function SearchView() {
+function ManufactureSearchView() {
     const [posters, updatePosters] = useState([]);
 
     useEffect(() => {
@@ -97,5 +97,5 @@ function SearchView() {
     );
 }
 
-export default SearchView;
+export default ManufactureSearchView;
 

@@ -10,21 +10,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
-@RestController
 @RequestMapping("/api")
+@RestController
 @RequiredArgsConstructor
 @Slf4j
 public class PosterController {
 
     private final PosterService posterService;
 
-    @Secured({ Authorities.USER })
     @PostMapping("/poster")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity createPoster(@RequestBody @Valid CreatePosterValidation validation) {
         this.posterService.createPoster(validation);
 

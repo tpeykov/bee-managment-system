@@ -6,7 +6,11 @@ import com.dev.bee_manegement_system.controlles.dtoes.PublicPosterDTO;
 import com.dev.bee_manegement_system.controlles.errors.EmailAlreadyUsedException;
 import com.dev.bee_manegement_system.controlles.errors.UsernameAlreadyUsedException;
 import com.dev.bee_manegement_system.controlles.validations.RegisterUserValidation;
+import com.dev.bee_manegement_system.domain.constants.Authorities;
+import com.dev.bee_manegement_system.domain.entities.Authority;
 import com.dev.bee_manegement_system.domain.entities.User;
+import com.dev.bee_manegement_system.domain.entities.UserAuthority;
+import com.dev.bee_manegement_system.repositories.UserAuthorityRepository;
 import com.dev.bee_manegement_system.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +37,7 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final UserAuthorityRepository userAuthorityRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthService authService;
     private final ModelMapper modelMapper;
@@ -79,8 +85,10 @@ public class UserService implements UserDetailsService {
         newUser.setUic(user.getUic());
         newUser.setActivated(true);
 
-        userRepository.save(newUser);
-        return newUser;
+        var savedUser = userRepository.save(newUser);
+
+        userAuthorityRepository.save(new UserAuthority(savedUser.getUuid(), Authorities.USER));
+        return savedUser;
     }
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(String username, User user) {

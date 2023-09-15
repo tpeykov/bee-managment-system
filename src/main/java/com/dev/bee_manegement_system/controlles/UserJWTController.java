@@ -1,6 +1,7 @@
 package com.dev.bee_manegement_system.controlles;
 
 import com.dev.bee_manegement_system.controlles.validations.LoginUserValidation;
+import com.dev.bee_manegement_system.domain.entities.Authority;
 import com.dev.bee_manegement_system.domain.entities.User;
 import com.dev.bee_manegement_system.repositories.UserRepository;
 import com.dev.bee_manegement_system.security.JWTFilter;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,7 +38,8 @@ public class UserJWTController {
         User user = this.userRepository.getUserByUic(loginUser.getUic()).orElse(null);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 user != null ? user.getUsername() : null,
-                loginUser.getPassword()
+                loginUser.getPassword(),
+                user.getAuthorities().stream().map(Authority::getName).map(SimpleGrantedAuthority::new).toList()
         );
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
