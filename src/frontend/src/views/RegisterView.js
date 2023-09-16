@@ -5,10 +5,7 @@ import '../css/forms-style.css'
 import {registerUser} from "../shared/services/user.service";
 import NotificationContext from "../shared/contexts/notification.context";
 import {useNavigate} from "react-router-dom";
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
+import { Link } from "react-router-dom";
 
 function RegisterView() {
     const {setNotification} = useContext(NotificationContext);
@@ -20,9 +17,9 @@ function RegisterView() {
 
         registerUser(data)
             .then((response) => {
-                console.log(response.data);
                 setNotification({ message: 'Successful registration!', active: true, severity: 'success' });
-                navigate('/register');
+                event.target.reset();
+                navigate('/login');
             })
             .catch((error) => {
                 setNotification({ message: 'Username is already used!', active: true, severity: 'error' });
@@ -73,20 +70,25 @@ function RegisterView() {
                             />
                         </div>
 
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                            <select name="role">
-                                <option value="ROLE_MANUFACTURER">Manufacturer</option>
-                                <option value="ROLE_MERCHANT">Merchant</option>
-                            </select>
+                        <div>
+                            <label> Role </label>
+                            <div className={'roles-select-container mb-3'}>
+                                <select name="role">
+                                    <option value="ROLE_MANUFACTURER">Manufacturer</option>
+                                    <option value="ROLE_MERCHANT">Merchant</option>
+                                </select>
+                            </div>
                         </div>
+
 
                         <div className="d-grid">
                             <button type="submit" className="btn btn-primary">
                                 Sign Up
                             </button>
                         </div>
+
                         <p className="text-right">
-                            Already registered <a href="/login">Sign in?</a>
+                            Already registered <Link to={'/login'}>Sign in?</Link>
                         </p>
                     </form>
                 </div>

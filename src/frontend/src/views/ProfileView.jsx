@@ -70,8 +70,7 @@ function HomeView(){
                                     aria-label="lab API tabs example"
                                     style={{color: '#85586F'}}>
                                     <Tab label="Personal information" value="user-info"/>
-                                    <Tab label="Owned Adds" value="created-ads"/>
-                                    <Tab label="favourite" value="favourite"/>
+                                    <Tab label="Owned Posters" value="created-posters"/>
                                 </TabList>
                             </Box>
                             <TabPanel value="user-info">
@@ -131,7 +130,7 @@ function HomeView(){
                                     </Grid>
                                 </form>
                             </TabPanel>
-                            <TabPanel value="created-ads">
+                            <TabPanel value="created-posters">
                                 <Box sx={{display: 'flex', flexDirection: 'column'}}></Box>
                             </TabPanel>
                         </TabContext>

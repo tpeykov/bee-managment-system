@@ -92,7 +92,7 @@ function NavigationMenu() {
                             marginRight: '20px',
                             textDecoration: 'none',
                             fontWeight: 'bold',
-                        }} to={"/"}> Search </NavLink>
+                        }} to={"/"}> Posters </NavLink>
                         <NavLink style={{
                             my: 2,
                             color: 'white',
@@ -100,7 +100,7 @@ function NavigationMenu() {
                             marginRight: '20px',
                             textDecoration: 'none',
                             fontWeight: 'bold',
-                        }} to={"/create-poster"}> Create Ad </NavLink>
+                        }} to={"/create-poster"}> Create Poster </NavLink>
 
                     </Box>
                     <Box sx={{flexGrow: 0}}>

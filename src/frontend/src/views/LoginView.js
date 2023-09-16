@@ -5,7 +5,7 @@ import '../css/forms-style.css'
 import {loginUser} from "../shared/services/user.service";
 import AuthContext from "../shared/contexts/auth.context";
 import NotificationContext from "../shared/contexts/notification.context";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {storeAuthToken} from "../shared/services/auth.service";
 
 function LoginView() {
@@ -64,7 +64,7 @@ function LoginView() {
                             </button>
                         </div>
                         <p className="text-right">
-                            Don't have an account? <a href="/register">Register here</a>
+                            Don't have an account? <Link to={'/register'}>Register here</Link>
                         </p>
                     </form>
                 </div>

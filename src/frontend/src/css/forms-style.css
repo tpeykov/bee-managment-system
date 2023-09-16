@@ -18,3 +18,15 @@
     border-radius: 15px;
     transition: all 0.3s;
 }
+
+.roles-select-container select {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    padding: .5rem .5rem;
+    border-radius: .5rem;
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+}

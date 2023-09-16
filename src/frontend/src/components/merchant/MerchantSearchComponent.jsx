@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import {CompaniesSearch} from "../CompaniesSearch";
 import {PosterCard} from "../PosterCard";
+import {Link} from "react-router-dom";
 
 
 function MerchantSearchComponent({ posters }) {
@@ -29,7 +30,7 @@ function MerchantSearchComponent({ posters }) {
                     >
                         <Stack spacing={1}>
                             <Typography variant="h4">
-                                Companies
+                                All public posters
                             </Typography>
                             <Stack
                                 alignItems="center"
@@ -39,16 +40,18 @@ function MerchantSearchComponent({ posters }) {
                             </Stack>
                         </Stack>
                         <div>
-                            <Button
-                                startIcon={(
-                                    <SvgIcon fontSize="small">
-                                    </SvgIcon>
-                                )}
-                                variant="contained"
-                                href={'/create-poster'}
-                            >
-                                Add
-                            </Button>
+                            <Link to='/create-poster'>
+                                <Button
+                                    startIcon={(
+                                        <SvgIcon fontSize="small">
+                                        </SvgIcon>
+                                    )}
+                                    variant="contained"
+                                >
+                                    Add
+                                </Button>
+                            </Link>
+
                         </div>
                     </Stack>
                     <CompaniesSearch />
