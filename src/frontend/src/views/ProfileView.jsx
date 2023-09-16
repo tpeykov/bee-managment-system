@@ -78,7 +78,7 @@ function HomeView(){
                                     <Grid container spacing={3} justifyContent="center">
                                         <Grid item xs={12} md={6}>
                                             <TextField
-                                                label="Username"
+                                                label="UIC"
                                                 variant="outlined"
                                                 name="username"
                                                 // value={userData.username}
@@ -99,20 +99,10 @@ function HomeView(){
                                         </Grid>
                                         <Grid item xs={12} md={6}>
                                             <TextField
-                                                label="First Name"
+                                                label="Company name"
                                                 variant="outlined"
                                                 name="firstName"
                                                 // value={userData.firstName}
-                                                // onChange={handleDataChange}
-                                                fullWidth
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12} md={6}>
-                                            <TextField
-                                                label="Last Name"
-                                                variant="outlined"
-                                                name="lastName"
-                                                // value={userData.lastName}
                                                 // onChange={handleDataChange}
                                                 fullWidth
                                             />
