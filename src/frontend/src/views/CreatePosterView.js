@@ -1,10 +1,20 @@
-import {Box, Button, Container, Stack, TextField, Typography} from "@mui/material";
+import {
+    Box,
+    Button,
+    Container,
+    FormControl, InputAdornment,
+    InputLabel,
+    OutlinedInput,
+    Stack,
+    TextField,
+    Typography
+} from "@mui/material";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {useState} from "react";
 import {createPoster} from "../shared/services/poster.service";
-function HomeView() {
+function CreatePosterView() {
 
     const [ data, updateData ] = useState({
         title: '',
@@ -68,6 +78,15 @@ function HomeView() {
                             />
                         </LocalizationProvider>
 
+                        <FormControl fullWidth sx={{ mb: 2 }}>
+                            <InputLabel htmlFor="outlined-adornment-amount">Price</InputLabel>
+                            <OutlinedInput
+                                id="outlined-adornment-amount"
+                                startAdornment={<InputAdornment position="start">lv.</InputAdornment>}
+                                label="Price"
+                            />
+                        </FormControl>
+
                         <Button onClick={(event) => createPosterHandler(event)} variant="contained">Create</Button>
                     </Stack>
                 </form>
@@ -77,4 +96,4 @@ function HomeView() {
     );
 }
 
-export default HomeView;
+export default CreatePosterView;

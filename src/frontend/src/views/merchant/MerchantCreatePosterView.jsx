@@ -1,4 +1,14 @@
-import {Box, Button, Container, Stack, TextField, Typography} from "@mui/material";
+import {
+    Box,
+    Button,
+    Container, FormControl,
+    InputAdornment,
+    InputLabel,
+    OutlinedInput,
+    Stack,
+    TextField,
+    Typography
+} from "@mui/material";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import {LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
@@ -36,7 +46,7 @@ function MerchantCreatPosterView() {
             }}
         >
             <Typography variant="h4" align="center" sx={{ margin: '1.5rem'}}  >
-                Create your own ad
+                Create your own poster
             </Typography>
             <Container maxWidth="xs">
                 <form>
@@ -62,6 +72,15 @@ function MerchantCreatPosterView() {
                                 shrink: true,
                             }}
                         />
+
+                        <FormControl fullWidth sx={{ mb: 2 }}>
+                            <InputLabel htmlFor="outlined-adornment-amount">Price</InputLabel>
+                            <OutlinedInput
+                                id="outlined-adornment-amount"
+                                startAdornment={<InputAdornment position="start">lv.</InputAdornment>}
+                                label="Price"
+                            />
+                        </FormControl>
 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker

@@ -42,7 +42,7 @@
 
 .hotel-view-name {
     font-family: var(--main-font-family);
-    font-size: 1.5rem;
+    font-size: 2.2rem;
     font-style: normal;
     font-weight: 600;
     line-height: 1.75rem;
@@ -96,7 +96,7 @@
 }
 
 .single-hotel-description-container {
-    margin: 2rem 0;
+    /*margin: 2rem 0;*/
 }
 
 .single-hotel-description {
