@@ -24,14 +24,14 @@ function App() {
                 <Routes>
                     <Route path='/' element={<RootLayout/>}>
                         <Route element={<PublicRoutes/>}>
-                            <Route path='login' element={<LoginView/>}></Route>
-                            <Route path='register' element={<RegisterView/>}></Route>
+                            <Route path='login' element={<LoginView/>}/>
+                            <Route path='register' element={<RegisterView/>}/>
                         </Route>
                         <Route element={<PrivateRoutes/>} exact>
-                            <Route path='/' element={<MerchantSearchView/>}></Route>
-                            <Route path='/profile' element={<ProfileView/>}></Route>
+                            <Route path='/' element={<MerchantSearchView/>}/>
+                            <Route path='/profile' element={<ProfileView/>}/>
                         </Route>
-                        <Route path='*' element={<NotFoundView/>}></Route>
+                        <Route path='*' element={<NotFoundView/>}/>
                     </Route>
                 </Routes>
             </BrowserRouter>

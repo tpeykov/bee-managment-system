@@ -1,9 +1,11 @@
 import {useEffect, useState} from "react";
 import {retrieveAllPosters} from "../shared/services/poster.service";
-import { MerchantSearchComponent } from '../components/merchant/MerchantSearchComponent';
+import MerchantSearchComponent from '../components/merchant/MerchantSearchComponent';
 
 function ManufactureSearchView() {
     const [posters, updatePosters] = useState([]);
+
+
 
     useEffect(() => {
         (async () => {
@@ -14,7 +16,7 @@ function ManufactureSearchView() {
 
     return (
         <>
-            <MerchantSearchComponent posters={posters}></MerchantSearchComponent>
+            <MerchantSearchComponent posters={posters}/>
         </>
     );
 }
