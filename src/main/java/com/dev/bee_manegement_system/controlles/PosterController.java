@@ -25,13 +25,12 @@ public class PosterController {
     private final PosterService posterService;
 
     @PostMapping("/poster")
-    @PreAuthorize("hasRole('USER')")
+    @Secured("ROLE_MANUFACTURER")
     public ResponseEntity createPoster(@RequestBody @Valid CreatePosterValidation validation) {
         this.posterService.createPoster(validation);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
-
 
     @GetMapping("/posters")
     public ResponseEntity<List<PublicPosterDTO>> getAllPosters() {
@@ -39,9 +38,10 @@ public class PosterController {
         return ResponseEntity.status(HttpStatus.CREATED).body(results);
     }
 
+    @Secured(Authorities.MANUFACTURER)
     @GetMapping("/posters/{uuid}")
     public ResponseEntity<Poster> getPoster(@PathVariable String uuid) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.posterService.getPoster(uuid));
+        return ResponseEntity.status(HttpStatus.OK).body(this.posterService.getPoster(uuid));
     }
 
 

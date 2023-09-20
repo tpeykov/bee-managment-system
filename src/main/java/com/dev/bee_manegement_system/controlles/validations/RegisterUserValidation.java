@@ -28,5 +28,5 @@ public class RegisterUserValidation {
     @Size(min = Constants.PASSWORD_MIN_LENGTH, max = Constants.PASSWORD_MAX_LENGTH)
     private String password;
 
-    private Authorities role;
+    private String role;
 }

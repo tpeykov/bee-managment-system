@@ -88,10 +88,10 @@ public class UserService implements UserDetailsService {
 
         var savedUser = userRepository.save(newUser);
 
-        if (user.getRole().equals(Authorities.ROLE_MANUFACTURER)) {
-            userAuthorityRepository.save(new UserAuthority(savedUser.getUuid(), Authorities.ROLE_MANUFACTURER.name()));
-        } else if (user.getRole().equals(Authorities.ROLE_MERCHANT)) {
-            userAuthorityRepository.save(new UserAuthority(savedUser.getUuid(), Authorities.ROLE_MERCHANT.name()));
+        if (user.getRole().equals(Authorities.MANUFACTURER)) {
+            userAuthorityRepository.save(new UserAuthority(savedUser.getUuid(), Authorities.MANUFACTURER));
+        } else if (user.getRole().equals(Authorities.MERCHANT)) {
+            userAuthorityRepository.save(new UserAuthority(savedUser.getUuid(), Authorities.MERCHANT));
         } else {
             throw new RuntimeException("Wrong role");
         }

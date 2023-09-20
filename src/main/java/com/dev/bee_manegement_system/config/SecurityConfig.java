@@ -1,5 +1,6 @@
 package com.dev.bee_manegement_system.config;
 
+import com.dev.bee_manegement_system.domain.constants.Authorities;
 import com.dev.bee_manegement_system.security.CustomAuthenticationFilter;
 import com.dev.bee_manegement_system.security.JWTConfigurer;
 import com.dev.bee_manegement_system.security.TokenProvider;
@@ -49,12 +50,10 @@ public class SecurityConfig {
                 .sessionManagement()
                 .sessionCreationPolicy(STATELESS)
                 .and()
-                .authorizeRequests()
-                .requestMatchers("/api/authenticate").permitAll()
-                .requestMatchers("/api/register").permitAll()
-                .requestMatchers("/api/offers").permitAll()
-                .anyRequest().permitAll()
-                .and()
+                .authorizeHttpRequests((request) -> {
+                    request.requestMatchers("/api/authenticate", "/api/register").permitAll();
+                    request.requestMatchers("/api/account/change-password").hasAuthority("USER_ROLE");
+                })
                 .httpBasic()
                 .and()
                 .apply(securityConfigurerAdapter());
