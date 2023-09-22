@@ -13,4 +13,6 @@ public interface PosterRepository extends JpaRepository<Poster, String> {
     List<Poster> getPosterByStatus(PosterStatus status);
 
     Optional<Poster> findByUuid(String posterUuid);
+
+    List<Poster> getAllByAuthorUuid(String uuid);
 }

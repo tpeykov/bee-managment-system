@@ -26,9 +26,10 @@ public class OfferController {
     }
 
     @PutMapping("/offers/{uuid}")
-    public ResponseEntity changeStatus(@PathVariable String uuid,
-                                       @RequestParam String status) {
-        offerService.changeStatus(uuid, status);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Offer> changeStatus(@PathVariable String uuid,
+                             @RequestParam String status){
+
+        Offer offer = offerService.changeStatus(uuid, status);
+        return ResponseEntity.status(offer != null ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST).body(offer);
     }
 }

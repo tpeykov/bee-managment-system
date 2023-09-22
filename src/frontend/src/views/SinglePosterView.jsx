@@ -27,6 +27,9 @@ import {USER_ROLES} from "../domain/enums/user-roles.enum";
 import OfferCard from "../components/OfferCard";
 import NotificationContext from "../shared/contexts/notification.context";
 
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 function SinglePosterView() {
     const {uuid} = useParams();
@@ -40,14 +43,11 @@ function SinglePosterView() {
     const [data, setData] = useState({});
 
     useEffect(() => {
-        console.log(userAuth.user.uuid)
         getPoster(uuid).then(response => {
-            console.log(response.data)
             setData(response.data);
 
             setIsLoading(false);
         }).catch((error) => {
-            console.log(error)
             setIsLoading(false);
         })
 
@@ -75,7 +75,7 @@ function SinglePosterView() {
             amount: formData.get('amount'),
             document: formData.get('document')
         }
-        console.log(formData.get('document'))
+
         createOffer(offerData)
             .then((response) => {
                 setNotification({message: 'Offer created', active: true, severity: 'success'});
@@ -85,6 +85,11 @@ function SinglePosterView() {
         })
 
         event.target.reset();
+    }
+
+    const filterOffersByPermission = (offer) => {
+        if (userAuth.user.role === USER_ROLES.MERCHANT || userAuth.user.role === USER_ROLES.ADMIN) return true;
+        return offer.author.uuid === userAuth.user.uuid;
     }
 
     return (
@@ -108,19 +113,10 @@ function SinglePosterView() {
                                             speed={2500}
                                             pagination={true}
                                             loop={true}
-                                            // autoplay={{delay: 1000, disableOnInteraction: true}}
-                                            onSlideChange={() => console.log('slide change')}
-                                            onSwiper={(swiper) => console.log(swiper)}
-                                            breakpoints={{
-                                                768: {
-                                                    slidesPerView: 1,
-                                                    spaceBetween: 50,
-                                                },
-                                            }}
                                         >
                                             {data.images.map((photo, index) => (
                                                 <SwiperSlide style={{height: '100%', cursor: 'pointer'}}
-                                                             key={generateRandomString(10)}
+                                                             key={index}
                                                              onClick={() => handlePhotoClick(photo)}>
                                                     <img src={photo.url}
                                                          style={{width: '100%', height: '100%', objectFit: 'cover'}}
@@ -209,9 +205,9 @@ function SinglePosterView() {
                                                           flexDirection: 'column',
                                                           width: 'min(100%, 22rem)'
                                                       }}>
-                                                    <h3 style={{textAlign: 'center', marginBottom: '3rem'}}>
-                                                        Create offer for the poster
-                                                    </h3>
+                                                    <h3 style={{textAlign: 'center', marginBottom: '1rem'}}> Create
+                                                        offer for the
+                                                        poster </h3>
 
                                                     <FormControl fullWidth sx={{mb: 2}}>
                                                         <InputLabel
@@ -244,12 +240,12 @@ function SinglePosterView() {
                                                                    variant="outlined" multiline required/>
                                                     </FormControl>
                                                     <input
+                                                        className='mb-2'
                                                         name="document"
                                                         type="file"
                                                         accept="image/*"
                                                         multiple
                                                         required={true}
-                                                        // onChange={handleImageChange}
                                                     />
                                                     <Button type={"submit"} color='success'
                                                             variant="contained"> Submit </Button>
@@ -266,16 +262,26 @@ function SinglePosterView() {
                             container
                             spacing={3}
                         >
+                            <Typography variant="h5" align="center" sx={{ margin: '1.2rem'}}>
+                                {userAuth.user.role === USER_ROLES.MANUFACTURER ? 'All offers created by you:' : 'All offers to the poster:'}
+                            </Typography>
                             {data.offers
-                                .filter(offer => offer.author.uuid === userAuth.user.uuid)
+                                .filter(filterOffersByPermission)
                                 .map((offer) => (
                                     <Grid
                                         xs={12}
                                         key={offer.uuid}
                                     >
-                                        <OfferCard offer={offer}></OfferCard>
+                                        <OfferCard offer={offer} data={data} setData={setData}></OfferCard>
                                     </Grid>
                                 ))}
+
+                            { data.offers.length === 0 &&
+                                (<Typography variant="p" align="center" sx={{ margin: '1.2rem'}}>
+                                    {userAuth.user.role === USER_ROLES.MANUFACTURER ? "You haven't created a offer yet!" : 'No offers to the poster!'}
+                                </Typography>)
+                            }
+
                         </Grid>
                     </section>
                 </div>

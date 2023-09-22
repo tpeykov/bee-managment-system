@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import {Button, CircularProgress, Grid, Paper, Tab, TextField, Typography} from "@mui/material";
@@ -7,35 +7,48 @@ import Box from "@mui/material/Box";
 import NotificationContext from "../shared/contexts/notification.context";
 import Avatar from "@mui/material/Avatar";
 import '../css/profile-view.css'
-function HomeView(){
+import AuthContext from "../shared/contexts/auth.context";
+import {USER_ROLES} from "../domain/enums/user-roles.enum";
+import {getOwnedPosters} from "../shared/services/poster.service";
+import {getOwnedOffers} from "../shared/services/offer.service";
+import OfferCard from "../components/OfferCard";
+import {PosterCard} from "../components/PosterCard";
 
+function HomeView() {
     const {notification, setNotification} = useContext(NotificationContext);
-
+    const {userAuth} = useContext(AuthContext);
     const [tab, setTab] = useState('user-info');
-    const [reservationsTab, setReservationsTab] = useState('future-flights');
-    const [userData, setUserData] = useState({});;
+
+    const [userData, setUserData] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+    const [offers, setOffers] = useState([]);
+    const [posters, setPosters] = useState([]);
 
     const [passwordData, setPasswordData] = useState({
         oldPassword: '',
         newPassword: ''
     });
+    useEffect(() => {
+        console.log(userAuth);
+        const request = userAuth.user.role === USER_ROLES.MANUFACTURER ? getOwnedOffers : getOwnedPosters;
 
+        request()
+            .then(response => {
+                if(userAuth.user.role === USER_ROLES.MANUFACTURER) {
+                    console.log('offers', response.data);
+                    setOffers(response.data);
+                } else {
+                    setPosters(response.data);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+
+    }, []);
 
     const handleTabChange = (event, newValue) => {
         setTab(newValue);
-    };
-
-    const handleReservationsTabChange = (event, newValue) => {
-        setReservationsTab(newValue);
-    };
-
-    const handleDataChange = (event) => {
-        const {name, value} = event.target;
-        setUserData({
-            ...userData,
-            [name]: value,
-        });
     };
 
     const handlePasswordDataChange = (event) => {
@@ -60,7 +73,7 @@ function HomeView(){
                         <Avatar style={{backgroundColor: '#85586F'}}>M</Avatar>
                     </div>
                     <Typography variant="h4" className="title">
-                       Trayan Peykov
+                        Trayan Peykov
                     </Typography>
                     <div>
                         <TabContext value={tab}>
@@ -70,7 +83,9 @@ function HomeView(){
                                     aria-label="lab API tabs example"
                                     style={{color: '#85586F'}}>
                                     <Tab label="Personal information" value="user-info"/>
-                                    <Tab label="Owned Posters" value="created-posters"/>
+                                    <Tab
+                                        label={userAuth.user.role === USER_ROLES.MANUFACTURER ? "Owned Offers" : "Owned Posters"}
+                                        value="created-posters"/>
                                 </TabList>
                             </Box>
                             <TabPanel value="user-info">
@@ -121,7 +136,30 @@ function HomeView(){
                                 </form>
                             </TabPanel>
                             <TabPanel value="created-posters">
-                                <Box sx={{display: 'flex', flexDirection: 'column'}}></Box>
+                                {userAuth.user.role === USER_ROLES.MERCHANT &&
+                                    <Grid
+                                        container
+                                        spacing={3}
+                                    >
+                                        {posters.map((poster) => (
+                                            <Grid
+                                                xs={12}
+                                                md={6}
+                                                lg={4}
+                                                key={poster.uuid}
+                                            >
+                                                <PosterCard poster={poster} />
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+                                }
+                                {userAuth.user.role === USER_ROLES.MANUFACTURER && (
+                                    <Box sx={{display: 'flex', flexDirection: 'column'}}>
+                                        { offers.map((offer, index) => <OfferCard key={index} offer={offer}></OfferCard>)}
+                                    </Box>
+                                    )
+                                }
+
                             </TabPanel>
                         </TabContext>
                     </div>

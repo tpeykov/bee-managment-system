@@ -23,3 +23,33 @@ export const changeOffer = (uuid, status) => {
         }
     });
 };
+
+export const getOwnedOffers = () => {
+    return axios.get(`${API_URL_FULL}/profile/offers`, {
+        headers: {
+            Authorization: 'Bearer ' + getAuthToken(),
+            'Access-Control-Allow-Origin': '*',
+            "Content-Type": 'application/json',
+        }
+    });
+}
+
+export const adminGetPosters = () => {
+    return axios.get(`${API_URL_FULL}/admin/posters`, {
+        headers: {
+            Authorization: 'Bearer ' + getAuthToken(),
+            'Access-Control-Allow-Origin': '*',
+            "Content-Type": 'application/json',
+        }
+    });
+}
+
+export const adminGetUsers = () => {
+    return axios.get(`${API_URL_FULL}/admin/users`, {
+        headers: {
+            Authorization: 'Bearer ' + getAuthToken(),
+            'Access-Control-Allow-Origin': '*',
+            "Content-Type": 'application/json',
+        }
+    });
+}

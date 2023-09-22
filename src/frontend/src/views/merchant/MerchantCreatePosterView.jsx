@@ -17,15 +17,8 @@ import {createPoster} from "../../shared/services/poster.service";
 import NotificationContext from "../../shared/contexts/notification.context";
 
 function MerchantCreatPosterView() {
-    const [formIsValid, setFormIsValid] = useState(false);
     const {setNotification} = useContext(NotificationContext);
-    const [data, updateData] = useState({
-        title: '',
-        description: '',
-        date: null,
-        price: '',
-        images: []
-    })
+    const [images, updateImages] = useState([]);
 
     const createPosterHandler = async (event) => {
         event.preventDefault();
@@ -40,13 +33,7 @@ function MerchantCreatPosterView() {
                 severity: 'success',
             });
 
-            updateData({
-                title: '',
-                description: '',
-                date: null,
-                price: '',
-                images: []
-            });
+            updateImages([]);
             event.target.reset();
         } catch (error) {
             console.error(error.response);
@@ -54,9 +41,7 @@ function MerchantCreatPosterView() {
     };
 
     const handleImageChange = (event) => {
-        const selectedImages = event.target.files;
-        updateData({...data, images: selectedImages});
-        setFormIsValid(selectedImages.length > 0);
+        updateImages( event.target.files);
     };
 
 
@@ -80,17 +65,11 @@ function MerchantCreatPosterView() {
                     >
                         <TextField
                             name='title'
-                            value={data.title}
-                            onChange={(event) => updateData({...data, title: event.target.value})}
                             label="Title" variant="outlined" required/>
                         <TextField
                             name='description'
-                            value={data.description}
-                            onChange={(event) => updateData({...data, description: event.target.value})}
                             label="Description" variant="outlined" multiline required/>
                         <TextField
-                            value={data.price}
-                            onChange={(event) => updateData({...data, price: event.target.value})}
                             label="Amount"
                             type="number"
                             name='amount'
@@ -111,13 +90,12 @@ function MerchantCreatPosterView() {
 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
-                                value={data.date}
                             />
                         </LocalizationProvider>
 
                         <Grid container spacing={2}>
-                            {data.images.length > 0 &&
-                                Array.from(data.images).map((file, index) => (
+                            {images.length > 0 &&
+                                Array.from(images).map((file, index) => (
                                     <Grid item key={index}>
                                         <img
                                             src={URL.createObjectURL(file)}
@@ -138,9 +116,7 @@ function MerchantCreatPosterView() {
                             required={true}
                             onChange={handleImageChange}
                         />
-                        <Button type='submit'
-                                disabled={!formIsValid}
-                                variant='contained'> Create</Button>
+                        <Button type='submit' variant='contained'> Create</Button>
                     </Stack>
                 </form>
             </Container>

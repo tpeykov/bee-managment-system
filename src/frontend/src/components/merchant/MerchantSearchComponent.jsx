@@ -8,12 +8,15 @@ import {
     Typography,
     Unstable_Grid2 as Grid
 } from '@mui/material';
-import {CompaniesSearch} from "../CompaniesSearch";
 import {PosterCard} from "../PosterCard";
 import {Link} from "react-router-dom";
-
+import {USER_ROLES} from "../../domain/enums/user-roles.enum";
+import {useContext} from "react";
+import AuthContext from "../../shared/contexts/auth.context";
 
 function MerchantSearchComponent({ posters }) {
+    const {userAuth, updateUserAuth} = useContext(AuthContext);
+
     return (<Box
             component="main"
             sx={{
@@ -40,21 +43,21 @@ function MerchantSearchComponent({ posters }) {
                             </Stack>
                         </Stack>
                         <div>
-                            <Link to='/create-poster'>
-                                <Button
-                                    startIcon={(
-                                        <SvgIcon fontSize="small">
-                                        </SvgIcon>
-                                    )}
-                                    variant="contained"
-                                >
-                                    Add
-                                </Button>
-                            </Link>
-
+                            {userAuth.user.role === USER_ROLES.MERCHANT &&
+                                <Link to='/create-poster'>
+                                    <Button
+                                        startIcon={(
+                                            <SvgIcon fontSize="small">
+                                            </SvgIcon>
+                                        )}
+                                        variant="contained"
+                                    >
+                                        Add
+                                    </Button>
+                                </Link>
+                            }
                         </div>
                     </Stack>
-                    <CompaniesSearch />
                     <Grid
                         container
                         spacing={3}

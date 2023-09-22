@@ -22,6 +22,15 @@ export const retrieveAllPosters = () => {
     });
 }
 
+export const getOwnedPosters = () => {
+    return axios.get(`${API_URL_FULL}/profile/posters`, {
+        headers: {
+            Authorization: 'Bearer ' + getAuthToken(),
+            'Access-Control-Allow-Origin': '*',
+            "Content-Type": 'application/json',
+        }
+    });
+}
 
 export const getPoster = (uuid) => {
     return axios.get(`${API_URL_FULL}/posters/${uuid}`, {

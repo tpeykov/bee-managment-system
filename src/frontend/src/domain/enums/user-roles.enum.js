@@ -5,6 +5,7 @@ export const USER_ROLES = {
 }
 
 export const OFFER_STATUS = {
-    APPROVED :'APPROVED',
-    DECLINED :'DECLINED',
+    APPROVED: 'APPROVED',
+    DECLINED: 'DECLINED',
+    INITIAL: 'INITIAL',
 }

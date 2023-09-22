@@ -3,7 +3,9 @@ package com.dev.bee_manegement_system.services;
 import com.dev.bee_manegement_system.controlles.dtoes.PublicPosterDTO;
 import com.dev.bee_manegement_system.controlles.validations.CreatePosterValidation;
 import com.dev.bee_manegement_system.domain.entities.Picture;
+import com.dev.bee_manegement_system.domain.entities.Offer;
 import com.dev.bee_manegement_system.domain.entities.Poster;
+import com.dev.bee_manegement_system.domain.entities.User;
 import com.dev.bee_manegement_system.domain.enums.PosterStatus;
 import com.dev.bee_manegement_system.repositories.PosterRepository;
 import lombok.RequiredArgsConstructor;
@@ -60,12 +62,15 @@ public class PosterService {
     }
 
     public Poster getPoster(String uuid) {
-        Poster poster = posterRepository.findByUuid(uuid).orElse(null);
+        return posterRepository.findByUuid(uuid).orElse(null);
+    }
 
-//        if (poster.getStatus().equals(PosterStatus.INACTIVE)){
-//            // TODO
-//        }
+    public List<Poster> getOwnedPosters() {
+        User user = this.authService.getAuthenticatedUser();
+        return this.posterRepository.getAllByAuthorUuid(user.getUuid());
+    }
 
-        return poster;
+    public List<Poster> getAdminPosters() {
+        return this.posterRepository.findAll();
     }
 }

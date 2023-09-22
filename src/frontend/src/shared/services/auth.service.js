@@ -23,11 +23,22 @@ export const getUserDetails = () => {
     return jwt_decode(getAuthToken());
 }
 export const getUserRole = () => {
+    if(!checkIsUserAuthenticated()) return '';
+
     const decoded = jwt_decode(getAuthToken());
     return decoded.auth;
 }
 
 export const getUserUuid = () => {
+    if(!checkIsUserAuthenticated()) return '';
+
     const decoded = jwt_decode(getAuthToken());
     return decoded.uuid;
+};
+
+export const getUserUsername = () => {
+    if(!checkIsUserAuthenticated()) return '';
+
+    const decoded = jwt_decode(getAuthToken());
+    return decoded.sub;
 };

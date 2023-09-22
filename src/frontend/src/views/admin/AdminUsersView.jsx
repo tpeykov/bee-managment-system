@@ -1,21 +1,20 @@
 import React, {useEffect, useState} from "react";
 import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import {adminGetUsers} from "../../shared/services/offer.service";
 
 function AdminUsersView() {
-  const [posters, updatePosters] = useState([]);
+  const [users, setUsers] = useState([]);
 
-  function createData(name, calories, fat, carbs) {
-    return { name, calories, fat, carbs };
-  }
-
-  const rows = [
-    createData('129857662', 'UIC1 OOD', 'uic1ood@gmail.com', 'Manufacture'),
-    createData('158739814', 'UIC2', 'uic2@gmail.com', 'Merchant'),
-  ];
-
-  useEffect(() => {}, []);
-
-
+  useEffect(() => {
+    adminGetUsers()
+        .then((response) => {
+          console.log(response.data);
+          setUsers(response.data);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+  }, []);
 
   return (
       <>
@@ -30,17 +29,15 @@ function AdminUsersView() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {users.map((user) => (
                   <TableRow
-                      key={row.name}
+                      key={user.uic}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
-                    <TableCell component="th" scope="row">
-                      {row.name}
-                    </TableCell>
-                    <TableCell align="right">{row.calories}</TableCell>
-                    <TableCell align="right">{row.fat}</TableCell>
-                    <TableCell align="right">{row.carbs}</TableCell>
+                    <TableCell align="right"> {user.uic}</TableCell>
+                    <TableCell align="right"> {user.username}</TableCell>
+                    <TableCell align="right">{user.email}</TableCell>
+                    <TableCell align="right">{user.carbs}</TableCell>
                   </TableRow>
               ))}
             </TableBody>

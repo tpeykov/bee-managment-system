@@ -12,15 +12,16 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import {NavLink, useNavigate} from 'react-router-dom';
-import AuthContext, { AuthDefaults }  from '../shared/contexts/auth.context';
+import AuthContext, {AuthDefaults} from '../shared/contexts/auth.context';
 import NotificationContext from "../shared/contexts/notification.context";
 import {removeAuthToken} from '../shared/services/auth.service';
+import {USER_ROLES} from "../domain/enums/user-roles.enum";
 
 function NavigationMenu() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const {userAuth, updateUserAuth} = useContext(AuthContext);
-    const { setNotification } = useContext(NotificationContext)
+    const {setNotification} = useContext(NotificationContext)
     const navigate = useNavigate();
 
     const handleOpenNavMenu = (event) => {
@@ -79,8 +80,8 @@ function NavigationMenu() {
                             }}
                         >
 
-                             <NavLink to={"/profile"}>Profile</NavLink>
-                             <Button variant="text" onClick={() => logout()}> Logout </Button>
+                            <NavLink to={"/profile"}>Profile</NavLink>
+                            <Button variant="text" onClick={() => logout()}> Logout </Button>
                         </Menu>
                     </Box>
                     {/* Main navigation */}
@@ -93,14 +94,36 @@ function NavigationMenu() {
                             textDecoration: 'none',
                             fontWeight: 'bold',
                         }} to={"/"}> Posters </NavLink>
-                        <NavLink style={{
-                            my: 2,
-                            color: 'white',
-                            display: 'block',
-                            marginRight: '20px',
-                            textDecoration: 'none',
-                            fontWeight: 'bold',
-                        }} to={"/create-poster"}> Create Poster </NavLink>
+                        {userAuth.user.role === USER_ROLES.MERCHANT &&
+                            (<NavLink style={{
+                                my: 2,
+                                color: 'white',
+                                display: 'block',
+                                marginRight: '20px',
+                                textDecoration: 'none',
+                                fontWeight: 'bold',
+                            }} to={"/create-poster"}> Create Poster </NavLink>)
+                        }
+                        {userAuth.user.role === USER_ROLES.ADMIN &&
+                            (<NavLink style={{
+                                my: 2,
+                                color: 'white',
+                                display: 'block',
+                                marginRight: '20px',
+                                textDecoration: 'none',
+                                fontWeight: 'bold',
+                            }} to={"/admin/posters"}> Manage Poster </NavLink>)
+                        }
+                        {userAuth.user.role === USER_ROLES.ADMIN &&
+                            (<NavLink style={{
+                                my: 2,
+                                color: 'white',
+                                display: 'block',
+                                marginRight: '20px',
+                                textDecoration: 'none',
+                                fontWeight: 'bold',
+                            }} to={"/admin/users"}> Manage Users </NavLink>)
+                        }
 
                     </Box>
                     <Box sx={{flexGrow: 0}}>

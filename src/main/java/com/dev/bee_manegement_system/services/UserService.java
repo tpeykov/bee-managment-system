@@ -27,7 +27,6 @@ import org.springframework.stereotype.Service;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -132,5 +131,9 @@ public class UserService implements UserDetailsService {
         information.setOffers(offers);
 
         return information;
+    }
+
+    public List<User> getAdminUsers() {
+        return this.userRepository.findAll();
     }
 }

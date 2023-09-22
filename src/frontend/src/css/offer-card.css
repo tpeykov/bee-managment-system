@@ -1,11 +1,44 @@
 .offer-wrapper {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 3rem;
+    gap: 2rem;
     padding: .5rem 1rem;
     border-radius: .5rem;
-    border: 1px solid indianred;
+    border: 1px solid gray;
 }
+
+.offer-wrapper.approved {
+    border: 1px solid #2e7d32;
+}
+
+.offer-wrapper.declined {
+    border: 1px solid #d53838;
+}
+
+.offer-status {
+    position: absolute;
+    top: 0;
+    left: 5%;
+    padding: .1rem .8rem;
+    font-size: .9rem;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color: #fff;
+    background-color: gray;
+    border-radius: .5rem;
+    text-transform: uppercase;
+    transform: translateY(-50%);
+}
+
+.offer-status.approved {
+    background-color: #2e7d32;
+}
+
+.offer-status.declined {
+    background-color: #d53838;
+}
+
 
 .author-container {
     display: flex;
@@ -20,7 +53,7 @@
 }
 
 .offer-description-container {
-    max-width: 35rem;
+    max-width: 32rem;
     color: rgba(0, 0, 0, .5);
 }
 

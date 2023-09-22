@@ -3,6 +3,7 @@ package com.dev.bee_manegement_system.services;
 import com.dev.bee_manegement_system.controlles.dtoes.OfferValidationDTO;
 import com.dev.bee_manegement_system.domain.entities.Offer;
 import com.dev.bee_manegement_system.domain.entities.Poster;
+import com.dev.bee_manegement_system.domain.entities.User;
 import com.dev.bee_manegement_system.domain.enums.OfferStatus;
 import com.dev.bee_manegement_system.repositories.OfferRepository;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class OfferService {
@@ -35,6 +39,7 @@ public class OfferService {
         offer.setAuthor(authService.getAuthenticatedUser());
         offer.setDescription(validation.getDescription());
         offer.setPrice(validation.getPrice());
+        offer.setStatus(OfferStatus.INITIAL);
 //        offer.setValidTo(dateFormat.parse(validation.getValidTo()));
         offer.setVerifyDocument(documentUrl);
         offer.setCreatedDate(Instant.now());
@@ -46,14 +51,20 @@ public class OfferService {
         return offer;
     }
 
-    public void changeStatus(String uuid, String status) {
+    public Offer changeStatus(String uuid, String status) {
         Offer offer = offerRepository.findByUuid(uuid).orElse(null);
+        if (offer == null) return null;
 
-        if (offer != null) {
-            OfferStatus statusToSet = OfferStatus.valueOf(status);
-            offer.setStatus
-                    (statusToSet);
-            offerRepository.save(offer);
-        }
+        OfferStatus statusToSet = OfferStatus.valueOf(status);
+        offer.setStatus(statusToSet);
+        offerRepository.save(offer);
+
+        return offer;
+    }
+
+    public List<Offer> getOwnedOffers() {
+        User user = this.authService.getAuthenticatedUser();
+        System.out.println(user.getUuid());
+        return this.offerRepository.findAllByAuthorUuid(user.getUuid());
     }
 }

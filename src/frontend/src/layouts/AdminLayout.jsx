@@ -9,11 +9,12 @@ import {
     ListItemText, Menu,
     Snackbar, styled, Typography, useTheme
 } from "@mui/material";
+import {NavLink} from 'react-router-dom';
 
 import MuiAppBar from '@mui/material/AppBar';
 import MuiDrawer from '@mui/material/Drawer';
 import {useState} from "react";
-import { Outlet } from "react-router-dom";
+import {Outlet} from "react-router-dom";
 import NotificationContext from "../shared/contexts/notification.context";
 
 import IconButton from "@mui/material/IconButton";
@@ -50,7 +51,7 @@ const closedMixin = (theme) => ({
     },
 });
 
-const DrawerHeader = styled('div')(({ theme }) => ({
+const DrawerHeader = styled('div')(({theme}) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
@@ -61,7 +62,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
+})(({theme, open}) => ({
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
@@ -77,8 +78,8 @@ const AppBar = styled(MuiAppBar, {
     }),
 }));
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-    ({ theme, open }) => ({
+const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(
+    ({theme, open}) => ({
         width: drawerWidth,
         flexShrink: 0,
         whiteSpace: 'nowrap',
@@ -97,7 +98,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function AdminLayout() {
     const theme = useTheme();
 
-    const [notification, setNotification] = useState({ active: false, message: '', severity: 'success' });
+    const [notification, setNotification] = useState({active: false, message: '', severity: 'success'});
     const [open, setOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -118,10 +119,10 @@ export default function AdminLayout() {
     };
 
     return (
-        <NotificationContext.Provider value={{ notification, setNotification }}>
+        <NotificationContext.Provider value={{notification, setNotification}}>
             <div className="root-layout">
-                <Box sx={{ display: 'flex' }}>
-                    <CssBaseline />
+                <Box sx={{display: 'flex'}}>
+                    <CssBaseline/>
                     <AppBar position="fixed" open={open}>
                         <Toolbar>
                             <IconButton
@@ -131,15 +132,15 @@ export default function AdminLayout() {
                                 edge="start"
                                 sx={{
                                     marginRight: 5,
-                                    ...(open && { display: 'none' }),
+                                    ...(open && {display: 'none'}),
                                 }}
                             >
-                                <MenuIcon />
+                                <MenuIcon/>
                             </IconButton>
                             <Typography variant="h6" noWrap component="div">
                                 Admin view page
                             </Typography>
-                            <div style={{ marginLeft: 'auto' }}>
+                            <div style={{marginLeft: 'auto'}}>
                                 <IconButton
                                     size="large"
                                     aria-label="account of current user"
@@ -148,7 +149,7 @@ export default function AdminLayout() {
                                     onClick={handleMenu}
                                     color="inherit"
                                 >
-                                    <AccountCircle />
+                                    <AccountCircle/>
                                 </IconButton>
                                 <Menu
                                     id="menu-appbar"
@@ -173,43 +174,53 @@ export default function AdminLayout() {
                     <Drawer variant="permanent" open={open}>
                         <DrawerHeader>
                             <IconButton onClick={handleDrawerClose}>
-                                {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                                {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
                             </IconButton>
                         </DrawerHeader>
-                        <Divider />
+                        <Divider/>
                         <List>
-                            {['Users', 'Posters'].map((text, index) => (
-                                <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                                    <ListItemButton
-                                        sx={{
-                                            minHeight: 48,
-                                            justifyContent: open ? 'initial' : 'center',
-                                            px: 2.5,
-                                        }}
-                                    >
-                                        <ListItemIcon
+                            {
+                                [{text: 'Users', link: '/admin/users'}, {
+                                    text: 'Posters',
+                                    link: '/admin/posters'
+                                }].map((record, index) => (
+                                    <ListItem key={record.text}
+                                              component={NavLink}
+                                              to={record.link}
+                                              disablePadding sx={{display: 'block'}}>
+                                        <ListItemButton
+
                                             sx={{
-                                                minWidth: 0,
-                                                mr: open ? 3 : 'auto',
-                                                justifyContent: 'center',
+                                                minHeight: 48,
+                                                justifyContent: open ? 'initial' : 'center',
+                                                px: 2.5,
                                             }}
                                         >
-                                            {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                        </ListItemIcon>
-                                        <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                                    </ListItemButton>
-                                </ListItem>
-                            ))}
+                                            <ListItemIcon
+                                                sx={{
+                                                    minWidth: 0,
+                                                    mr: open ? 3 : 'auto',
+                                                    justifyContent: 'center',
+                                                }}
+                                            >
+                                                {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}
+                                            </ListItemIcon>
+                                            <ListItemText primary={record.text} sx={{opacity: open ? 1 : 0}}/>
+                                        </ListItemButton>
+                                    </ListItem>
+                                ))}
                         </List>
-                        <Divider />
+                        <Divider/>
                     </Drawer>
-                    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                        <DrawerHeader />
+                    <Box component="main" sx={{flexGrow: 1, p: 3}}>
+                        <DrawerHeader/>
                         <Outlet/>
                     </Box>
                 </Box>
-                <Snackbar open={notification.active} autoHideDuration={6000} onClose={() => setNotification({ ...notification, active: false })}>
-                    <Alert onClose={() => setNotification({ ...notification, active: false })} severity={notification.severity} sx={{ width: '100%' }}>
+                <Snackbar open={notification.active} autoHideDuration={6000}
+                          onClose={() => setNotification({...notification, active: false})}>
+                    <Alert onClose={() => setNotification({...notification, active: false})}
+                           severity={notification.severity} sx={{width: '100%'}}>
                         {notification.message}
                     </Alert>
                 </Snackbar>
