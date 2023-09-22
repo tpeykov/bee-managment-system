@@ -2,6 +2,7 @@ package com.dev.bee_manegement_system.services;
 
 import com.dev.bee_manegement_system.controlles.dtoes.PublicPosterDTO;
 import com.dev.bee_manegement_system.controlles.validations.CreatePosterValidation;
+import com.dev.bee_manegement_system.domain.entities.Picture;
 import com.dev.bee_manegement_system.domain.entities.Poster;
 import com.dev.bee_manegement_system.domain.enums.PosterStatus;
 import com.dev.bee_manegement_system.repositories.PosterRepository;
@@ -9,9 +10,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +22,7 @@ public class PosterService {
     private final PosterRepository posterRepository;
     private final AuthService authService;
     private final ModelMapper modelMapper;
+    private final ImageCloudService imageCloudService;
 
     public void createPoster(CreatePosterValidation validation) {
         Poster poster = new Poster();
@@ -29,6 +31,17 @@ public class PosterService {
         poster.setPrice(validation.getPrice());
         poster.setAuthor(authService.getAuthenticatedUser());
         poster.setStatus(PosterStatus.ACTIVE);
+
+
+        for (MultipartFile image : validation.getImages()) {
+            String pictureUrl = imageCloudService.saveImage(image);
+            Picture picture = new Picture();
+            picture.setPoster(poster);
+            picture.setUrl(pictureUrl);
+            picture.setTitle(image.getOriginalFilename());
+            poster.getImages().add(picture);
+            // TODO save image
+        }
 
         this.posterRepository.save(poster);
     }

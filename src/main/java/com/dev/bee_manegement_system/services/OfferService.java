@@ -11,23 +11,24 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.util.Date;
 
 @Service
 public class OfferService {
     private final AuthService authService;
     private final OfferRepository offerRepository;
     private final PosterService posterService;
+    private final ImageCloudService imageCloudService;
 
-    public OfferService(AuthService authService, OfferRepository offerRepository, PosterService posterService) {
+    public OfferService(AuthService authService, OfferRepository offerRepository, PosterService posterService, ImageCloudService imageCloudService) {
         this.authService = authService;
         this.offerRepository = offerRepository;
         this.posterService = posterService;
+        this.imageCloudService = imageCloudService;
     }
 
     public Offer createOffer(OfferValidationDTO validation) throws ParseException {
         Poster poster = posterService.getByUuid(validation.getPosterUuid());
+        String documentUrl = imageCloudService.saveImage(validation.getDocument());
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Offer offer = new Offer();
@@ -35,7 +36,7 @@ public class OfferService {
         offer.setDescription(validation.getDescription());
         offer.setPrice(validation.getPrice());
 //        offer.setValidTo(dateFormat.parse(validation.getValidTo()));
-//        offer.setVerifyDocument(validation.getVerifyDocument());
+        offer.setVerifyDocument(documentUrl);
         offer.setCreatedDate(Instant.now());
         offerRepository.save(offer);
 

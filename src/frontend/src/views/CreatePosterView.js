@@ -20,7 +20,8 @@ function CreatePosterView() {
         title: '',
         description: '',
         date: null,
-        price: ''
+        price: '',
+        images: []
     })
 
     const createPosterHandler = async (event) => {
