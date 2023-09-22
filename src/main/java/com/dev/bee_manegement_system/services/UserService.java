@@ -84,9 +84,9 @@ public class UserService implements UserDetailsService {
         newUser.setPassword(encryptedPassword);
         newUser.setEmail(user.getEmail().toLowerCase());
         newUser.setUic(user.getUic());
-        newUser.setActivated(true);
 
-        var savedUser = userRepository.save(newUser);
+
+        User savedUser = userRepository.save(newUser);
 
         if (user.getRole().equals(Authorities.MANUFACTURER)) {
             userAuthorityRepository.save(new UserAuthority(savedUser.getUuid(), Authorities.MANUFACTURER));
@@ -100,9 +100,6 @@ public class UserService implements UserDetailsService {
     }
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(String username, User user) {
-        if (!user.isActivated()) {
-            throw new Error("User " + username + " was not activated");
-        }
         List<GrantedAuthority> grantedAuthorities = user
                 .getAuthorities()
                 .stream()

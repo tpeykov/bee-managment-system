@@ -1,8 +1,12 @@
-import { createContext } from "react";
-import {checkIsUserAuthenticated} from "../services/auth.service";
+import {createContext} from "react";
+import {checkIsUserAuthenticated, getUserRole, getUserUuid} from "../services/auth.service";
+
 export const AuthDefaults = {
     isAuthenticated: checkIsUserAuthenticated(),
-    user: {},
+    user: {
+        uuid: getUserUuid(),
+        role: getUserRole()
+    },
 };
 
 const AuthContext = createContext(AuthDefaults);

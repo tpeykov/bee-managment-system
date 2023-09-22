@@ -6,9 +6,9 @@ import {
     Modal,
     OutlinedInput,
     TextField,
-    Typography
+    Typography, Unstable_Grid2 as Grid
 } from "@mui/material";
-import {useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {Autoplay, Pagination} from "swiper/modules";
 import {Swiper, SwiperSlide} from "swiper/react";
 import IconButton from "@mui/material/IconButton";
@@ -17,18 +17,41 @@ import CloseIcon from "@mui/icons-material/Close";
 import '../css/single-hotel-page.css'
 import {generateRandomString} from "../shared/utils/utils";
 import Avatar from "@mui/material/Avatar";
+import {getPoster} from "../shared/services/poster.service";
+import {useParams} from "react-router-dom";
+import {createOffer} from "../shared/services/offer.service";
+import AuthContext from "../shared/contexts/auth.context";
+import {USER_ROLES} from "../domain/enums/user-roles.enum";
+import {PosterCard} from "../components/PosterCard";
+import OfferCard from "../components/OfferCard";
+import NotificationContext from "../shared/contexts/notification.context";
 
 
 function SinglePosterView() {
-    const [isLoading, setIsLoading] = useState(false);
+    const {uuid} = useParams();
+
+    const {userAuth} = useContext(AuthContext);
+    const {setNotification} = useContext(NotificationContext);
+
+    const [isLoading, setIsLoading] = useState(true);
     const [selectedPhoto, setSelectedPhoto] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [poster, setPoster] = useState({ name: "Търся 100кг. акциев мед", description: 'Обявата за търсене на 100 килограма акциев мед представлява запитване от страна на потенциален купувач, който е в търсене на големи количества акциев мед. Този вид мед обикновено се предлага на специални цени или с отстъпки, което го прави изключително привлекателен за търговци и фермери. Купувачът може да бъде фирма, които използва мед в производството си, или физическо лице, което се интересува от закупуване на по-големи количества мед за домашна употреба или за продажба.\n' +
-            '\n' +
-            'Този вид обява обикновено съдържа следните ключови точки:\n' +
-            '\n' +
-            '    Количество: 100 килограма мед.\n' +
-            '    Тип на меда: Акциев мед, който може да има специфични характеристики или произход.\n' });
+    const [data, setData] = useState({});
+
+    useEffect(() => {
+        console.log(userAuth.user.uuid)
+        getPoster(uuid).then(response => {
+            console.log(response.data)
+            setData(response.data);
+
+            setIsLoading(false);
+        }).catch((error) => {
+            console.log(error)
+            setIsLoading(false);
+        })
+
+    }, [])
+
 
     const handlePhotoClick = (photo) => {
         setSelectedPhoto(photo);
@@ -40,6 +63,28 @@ function SinglePosterView() {
         setIsModalOpen(false);
     };
 
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+
+        const offerData = {
+            posterUuid: data.uuid,
+            price: formData.get('price'),
+            description: formData.get('description'),
+            amount: formData.get('amount')
+        }
+
+        createOffer(offerData)
+            .then((response) => {
+                setNotification({ message: 'Offer created', active: true, severity: 'success' });
+                setData({ ...data, offers: [ ...data.offers, response.data ]});
+            }).catch((error) => {
+            console.log(error)
+        })
+
+        event.target.refresh();
+    }
+
     return (
         <>
             {isLoading &&
@@ -50,11 +95,6 @@ function SinglePosterView() {
             {!isLoading &&
                 <div className='single-hotel-view-content-wrapper'>
                     <div className="single-hotel-view-content-container">
-                        <div className='single-hotel-view-header'>
-                            <div>
-                                <h2 className='hotel-view-name'> { poster.name } </h2>
-                            </div>
-                        </div>
                         <div className='single-hotel-view-content'>
                             <div className="single-hotel-pictures-container">
                                 <div className='single-hotel-left-container'>
@@ -77,10 +117,12 @@ function SinglePosterView() {
                                             }}
                                         >
                                             {[1, 2, 3, 4, 5].map((photo, index) => (
-                                                <SwiperSlide style={{height: '100%', cursor: 'pointer'}} key={generateRandomString(10)}
+                                                <SwiperSlide style={{height: '100%', cursor: 'pointer'}}
+                                                             key={generateRandomString(10)}
                                                              onClick={() => handlePhotoClick(photo)}>
                                                     <img src='https://picsum.photos/200/300'
-                                                         style={{width: '100%', height: '100%', objectFit: 'cover'}} alt='poster photo'/>
+                                                         style={{width: '100%', height: '100%', objectFit: 'cover'}}
+                                                         alt='poster photo'/>
                                                 </SwiperSlide>
                                             ))}
                                         </Swiper>
@@ -128,7 +170,8 @@ function SinglePosterView() {
                                         {
                                             [1, 2, 3, 4].filter((_, index) => (index >= 1 && index < 5))
                                                 .map((photo, index) => (
-                                                    <div className="single-hotel-secondary-picture" key={generateRandomString(10)}>
+                                                    <div className="single-hotel-secondary-picture"
+                                                         key={generateRandomString(10)}>
                                                         <img style={{width: '100%', height: '100%', objectFit: 'cover'}}
                                                              src='https://picsum.photos/200/300'/>
                                                     </div>
@@ -143,54 +186,79 @@ function SinglePosterView() {
                                             src="/path-to-author-image.jpg"
                                         />
                                         <div>
-                                            <Typography variant="h6">Траян Пейков</Typography>
+                                            <Typography variant="h6">{data.author.username}</Typography>
                                             <Typography variant="body2"> Фирма с 15 годишен опит </Typography>
                                         </div>
                                     </Box>
                                     <Box style={{display: 'flex', alignItems: 'center', gap: '.8rem'}}>
-                                        <h5> 40 <span>лв/кг.</span> </h5>
+                                        <h5> Price: {data.price} <span>лв/кг.</span></h5>
                                     </Box>
                                     <Box>
                                         <div className="single-hotel-description-container">
                                             <p className="single-hotel-description">
-                                                {poster.description}
+                                                {data.description}
                                             </p>
                                         </div>
+                                        { userAuth.user.role === USER_ROLES.MANUFACTURER &&
+                                            <div className={'mt-5'} style={{display: 'flex', justifyContent: 'center'}}>
+                                                <form onSubmit={(event) => handleSubmit(event)}
+                                                      className={'mb-5'}
+                                                      style={{display: 'flex', flexDirection: 'column', width: 'min(100%, 22rem)'}}>
+                                                    <h3 style={{textAlign: 'center', marginBottom: '3rem'}}> Create offer for the
+                                                        poster </h3>
+
+                                                    <FormControl fullWidth sx={{mb: 2}}>
+                                                        <InputLabel htmlFor="outlined-adornment-amount">Price</InputLabel>
+                                                        <OutlinedInput
+                                                            id="outlined-adornment-amount"
+                                                            name='price'
+                                                            startAdornment={<InputAdornment position="start">lv.</InputAdornment>}
+                                                            label="Price"
+                                                        />
+                                                    </FormControl>
+
+                                                    <FormControl fullWidth sx={{mb: 2}}>
+                                                        <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
+                                                        <OutlinedInput
+                                                            id="outlined-adornment-amount"
+                                                            startAdornment={<InputAdornment position="start">kg.</InputAdornment>}
+                                                            label="Amount"
+                                                            name='amount'
+                                                        />
+                                                    </FormControl>
+
+                                                    <FormControl fullWidth sx={{mb: 2}}>
+                                                        <TextField label="Description"
+                                                                   name='description'
+                                                                   id='description'
+                                                                   variant="outlined" multiline required/>
+                                                    </FormControl>
+                                                    <Button type={"submit"} color='success' variant="contained"> Submit </Button>
+                                                </form>
+                                            </div>
+                                        }
                                     </Box>
                                 </div>
                             </div>
-
-
-                            <div className={'mt-5'} style={{display: 'flex', justifyContent: 'center'}}>
-                                <form className={'mb-5'} style={{display: 'flex', flexDirection: 'column', width: 'min(100%, 22rem)'}}>
-                                    <h3 style={{textAlign: 'center', marginBottom: '3rem'}}> Create offer for the poster </h3>
-
-                                    <FormControl fullWidth sx={{ mb: 2 }}>
-                                        <InputLabel htmlFor="outlined-adornment-amount">Price</InputLabel>
-                                        <OutlinedInput
-                                            id="outlined-adornment-amount"
-                                            startAdornment={<InputAdornment position="start">lv.</InputAdornment>}
-                                            label="Price"
-                                        />
-                                    </FormControl>
-                                    <FormControl fullWidth sx={{ mb: 2 }}>
-                                        <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
-                                        <OutlinedInput
-                                            id="outlined-adornment-amount"
-                                            startAdornment={<InputAdornment position="start">kg.</InputAdornment>}
-                                            label="Amount"
-                                        />
-                                    </FormControl>
-                                    <FormControl fullWidth sx={{ mb: 2 }}>
-                                        <TextField label="Description" variant="outlined" multiline required />
-                                    </FormControl>
-
-
-                                    <Button color='success' variant="contained"> Submit </Button>
-                                </form>
-                            </div>
                         </div>
                     </div>
+                    <section className={'offers-section'}>
+                        <Grid
+                            container
+                            spacing={3}
+                        >
+                            {data.offers
+                                .filter(offer => offer.author.uuid === userAuth.user.uuid)
+                                .map((offer) => (
+                                    <Grid
+                                        xs={12}
+                                        key={offer.uuid}
+                                    >
+                                        <OfferCard offer={offer}></OfferCard>
+                                    </Grid>
+                                ))}
+                        </Grid>
+                    </section>
                 </div>
             }
         </>

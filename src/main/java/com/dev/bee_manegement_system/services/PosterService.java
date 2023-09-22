@@ -47,11 +47,11 @@ public class PosterService {
     }
 
     public Poster getPoster(String uuid) {
-        Poster poster = posterRepository.findByUuid(uuid).orElseThrow();
+        Poster poster = posterRepository.findByUuid(uuid).orElse(null);
 
-        if (poster.getStatus().equals(PosterStatus.INACTIVE)){
-            // TODO
-        }
+//        if (poster.getStatus().equals(PosterStatus.INACTIVE)){
+//            // TODO
+//        }
 
         return poster;
     }

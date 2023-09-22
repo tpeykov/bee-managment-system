@@ -62,26 +62,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "last_name", length = 50)
     private String lastName;
 
-    @NotNull
-    @Column(nullable = false)
-    private boolean activated = false;
-
-    @Size(max = 20)
-    @Column(name = "activation_key", length = 20)
     @JsonIgnore
-    private String activationKey;
-
-    @Size(max = 20)
-    @Column(name = "reset_key", length = 20)
-    @JsonIgnore
-    private String resetKey;
-
-    @Column(name = "reset_date")
-    private Instant resetDate = null;
-
     @OneToMany(mappedBy = "author")
     private List<Poster> posters;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "author")
     private List<Offer> offers;
 

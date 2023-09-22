@@ -1,11 +1,14 @@
 import PropTypes from 'prop-types';
-import { Avatar, Box, Card, CardContent, Divider, Stack, SvgIcon, Typography } from '@mui/material';
+import {Avatar, Box, Card, CardContent, Divider, Stack, SvgIcon, Typography} from '@mui/material';
+import {useNavigate} from "react-router-dom";
+
 
 export const PosterCard = (props) => {
-    const { poster } = props;
-
+    const {poster} = props;
+    const navigate = useNavigate();
     return (
         <Card
+            onClick={() => navigate(`/poster/${poster.uuid}`)}
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -27,14 +30,14 @@ export const PosterCard = (props) => {
                     {poster.description}
                 </Typography>
             </CardContent>
-            <Box sx={{ flexGrow: 1 }} />
-            <Divider />
+            <Box sx={{flexGrow: 1}}/>
+            <Divider/>
             <Stack
                 alignItems="center"
                 direction="row"
                 justifyContent="space-between"
                 spacing={2}
-                sx={{ p: 2 }}
+                sx={{p: 2}}
             >
                 <Stack
                     alignItems="center"

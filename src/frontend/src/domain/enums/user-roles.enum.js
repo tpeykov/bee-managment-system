@@ -3,3 +3,8 @@ export const USER_ROLES = {
     MERCHANT: 'ROLE_MERCHANT',
     MANUFACTURER: 'ROLE_MANUFACTURER'
 }
+
+export const OFFER_STATUS = {
+    APPROVED :'APPROVED',
+    DECLINED :'DECLINED',
+}

@@ -25,7 +25,7 @@ public class PosterController {
     private final PosterService posterService;
 
     @PostMapping("/poster")
-    @Secured("ROLE_MANUFACTURER")
+//    @Secured("ROLE_MANUFACTURER")
     public ResponseEntity createPoster(@RequestBody @Valid CreatePosterValidation validation) {
         this.posterService.createPoster(validation);
 
@@ -38,11 +38,11 @@ public class PosterController {
         return ResponseEntity.status(HttpStatus.CREATED).body(results);
     }
 
-    @Secured(Authorities.MANUFACTURER)
+//    @Secured(Authorities.MANUFACTURER)
     @GetMapping("/posters/{uuid}")
-    public ResponseEntity<Poster> getPoster(@PathVariable String uuid) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.posterService.getPoster(uuid));
+    public Poster getPoster(@PathVariable String uuid) {
+        Poster poster = this.posterService.getPoster(uuid);
+        return poster;
+//        return ResponseEntity.ok(poster);
     }
-
-
 }

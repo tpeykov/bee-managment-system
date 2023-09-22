@@ -22,3 +22,13 @@ export const retrieveAllPosters = () => {
         }
     });
 }
+
+
+export const getPoster = (uuid) => {
+    return axios.get(`${API_URL_FULL}/posters/${uuid}`, {
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            "Content-Type": 'application/json',
+        }
+    });
+}

@@ -24,10 +24,9 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path='/admin/' element={<AdminLayout/>}>
-                        <Route element={<PublicRoutes/>}>
-                            <Route path='users' element={<AdminUsersView/>}/>
-                            <Route path='posters' element={<AdminPostersView/>}/>
-                        </Route>
+                        <Route path='users' element={<AdminUsersView/>}/>
+                        <Route path='posters' element={<AdminPostersView/>}/>
+                        <Route path='poster/:uuid' element={<SinglePosterView/>}/>
                         <Route path='*' element={<NotFoundView/>}/>
                     </Route>
                     <Route path='/' element={<RootLayout/>}>

@@ -22,3 +22,12 @@ export const checkIsUserAuthenticated = () => {
 export const getUserDetails = () => {
     return jwt_decode(getAuthToken());
 }
+export const getUserRole = () => {
+    const decoded = jwt_decode(getAuthToken());
+    return decoded.auth;
+}
+
+export const getUserUuid = () => {
+    const decoded = jwt_decode(getAuthToken());
+    return decoded.uuid;
+};

@@ -1,13 +1,12 @@
 package com.dev.bee_manegement_system.domain.entities;
 
+import com.dev.bee_manegement_system.domain.enums.OfferStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -34,4 +33,7 @@ public class Offer extends AbstractAuditingEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "author_uuid", referencedColumnName = "uuid")
     private User author;
+
+    @Enumerated(EnumType.STRING)
+    private OfferStatus status;
 }

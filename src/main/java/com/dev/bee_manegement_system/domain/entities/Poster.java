@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "posters")
-public class Poster extends AbstractAuditingEntity implements Serializable {
+public class Poster extends AbstractAuditingEntity {
     @Id
     @GeneratedValue(generator = "uuid-poster")
     @GenericGenerator(name = "uuid-poster",
@@ -45,4 +45,19 @@ public class Poster extends AbstractAuditingEntity implements Serializable {
 
     @OneToMany
     private List<Offer> offers;
+
+    @Override
+    public String toString() {
+        return "Poster{" +
+                "uuid='" + uuid + '\'' +
+                ", type=" + type +
+                ", status=" + status +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", author=" + author +
+                ", title='" + title + '\'' +
+                ", validTo=" + validTo +
+                ", offers=" + offers +
+                '}';
+    }
 }

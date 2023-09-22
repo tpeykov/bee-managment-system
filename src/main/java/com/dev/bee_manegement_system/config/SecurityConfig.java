@@ -53,6 +53,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests((request) -> {
                     request.requestMatchers("/api/authenticate", "/api/register").permitAll();
                     request.requestMatchers("/api/account/change-password").hasAuthority("USER_ROLE");
+//                    request.requestMatchers("/api/poster").hasAuthority("ROLE_MANUFACTURER");
+                    request.anyRequest().permitAll();
                 })
                 .httpBasic()
                 .and()
