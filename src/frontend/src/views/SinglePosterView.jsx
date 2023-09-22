@@ -1,19 +1,21 @@
 import {
-    Box, Button,
-    CircularProgress, FormControl,
+    Box,
+    Button,
+    CircularProgress,
+    FormControl,
     InputAdornment,
     InputLabel,
     Modal,
     OutlinedInput,
     TextField,
-    Typography, Unstable_Grid2 as Grid
+    Typography,
+    Unstable_Grid2 as Grid
 } from "@mui/material";
 import {useContext, useEffect, useState} from "react";
 import {Autoplay, Pagination} from "swiper/modules";
 import {Swiper, SwiperSlide} from "swiper/react";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-
 import '../css/single-hotel-page.css'
 import {generateRandomString} from "../shared/utils/utils";
 import Avatar from "@mui/material/Avatar";
@@ -22,7 +24,6 @@ import {useParams} from "react-router-dom";
 import {createOffer} from "../shared/services/offer.service";
 import AuthContext from "../shared/contexts/auth.context";
 import {USER_ROLES} from "../domain/enums/user-roles.enum";
-import {PosterCard} from "../components/PosterCard";
 import OfferCard from "../components/OfferCard";
 import NotificationContext from "../shared/contexts/notification.context";
 
@@ -71,18 +72,19 @@ function SinglePosterView() {
             posterUuid: data.uuid,
             price: formData.get('price'),
             description: formData.get('description'),
-            amount: formData.get('amount')
+            amount: formData.get('amount'),
+            document: formData.get('document')
         }
-
+        console.log(formData.get('document'))
         createOffer(offerData)
             .then((response) => {
-                setNotification({ message: 'Offer created', active: true, severity: 'success' });
-                setData({ ...data, offers: [ ...data.offers, response.data ]});
+                setNotification({message: 'Offer created', active: true, severity: 'success'});
+                setData({...data, offers: [...data.offers, response.data]});
             }).catch((error) => {
             console.log(error)
         })
 
-        event.target.refresh();
+        event.target.reset();
     }
 
     return (
@@ -116,11 +118,11 @@ function SinglePosterView() {
                                                 },
                                             }}
                                         >
-                                            {[1, 2, 3, 4, 5].map((photo, index) => (
+                                            {data.images.map((photo, index) => (
                                                 <SwiperSlide style={{height: '100%', cursor: 'pointer'}}
                                                              key={generateRandomString(10)}
                                                              onClick={() => handlePhotoClick(photo)}>
-                                                    <img src='https://picsum.photos/200/300'
+                                                    <img src={photo.url}
                                                          style={{width: '100%', height: '100%', objectFit: 'cover'}}
                                                          alt='poster photo'/>
                                                 </SwiperSlide>
@@ -142,7 +144,7 @@ function SinglePosterView() {
                                             }}>
                                                 {selectedPhoto && (
                                                     <img
-                                                        src='https://picsum.photos/200/300'
+                                                        src={selectedPhoto.url}
                                                         style={{
                                                             width: '100%',
                                                             height: 'auto',
@@ -168,14 +170,13 @@ function SinglePosterView() {
                                     </div>
                                     <div className="single-hotel-secondary-pictures-container">
                                         {
-                                            [1, 2, 3, 4].filter((_, index) => (index >= 1 && index < 5))
-                                                .map((photo, index) => (
-                                                    <div className="single-hotel-secondary-picture"
-                                                         key={generateRandomString(10)}>
-                                                        <img style={{width: '100%', height: '100%', objectFit: 'cover'}}
-                                                             src='https://picsum.photos/200/300'/>
-                                                    </div>
-                                                ))
+                                            data.images.slice(0, 4).map((photo, index) => (
+                                                <div className="single-hotel-secondary-picture"
+                                                     key={generateRandomString(10)}>
+                                                    <img style={{width: '100%', height: '100%', objectFit: 'cover'}}
+                                                         src={photo.url}/>
+                                                </div>
+                                            ))
                                         }
                                     </div>
                                 </div>
@@ -199,29 +200,38 @@ function SinglePosterView() {
                                                 {data.description}
                                             </p>
                                         </div>
-                                        { userAuth.user.role === USER_ROLES.MANUFACTURER &&
+                                        {userAuth.user.role === USER_ROLES.MANUFACTURER &&
                                             <div className={'mt-5'} style={{display: 'flex', justifyContent: 'center'}}>
                                                 <form onSubmit={(event) => handleSubmit(event)}
                                                       className={'mb-5'}
-                                                      style={{display: 'flex', flexDirection: 'column', width: 'min(100%, 22rem)'}}>
-                                                    <h3 style={{textAlign: 'center', marginBottom: '3rem'}}> Create offer for the
-                                                        poster </h3>
+                                                      style={{
+                                                          display: 'flex',
+                                                          flexDirection: 'column',
+                                                          width: 'min(100%, 22rem)'
+                                                      }}>
+                                                    <h3 style={{textAlign: 'center', marginBottom: '3rem'}}>
+                                                        Create offer for the poster
+                                                    </h3>
 
                                                     <FormControl fullWidth sx={{mb: 2}}>
-                                                        <InputLabel htmlFor="outlined-adornment-amount">Price</InputLabel>
+                                                        <InputLabel
+                                                            htmlFor="outlined-adornment-amount">Price</InputLabel>
                                                         <OutlinedInput
                                                             id="outlined-adornment-amount"
                                                             name='price'
-                                                            startAdornment={<InputAdornment position="start">lv.</InputAdornment>}
+                                                            startAdornment={<InputAdornment
+                                                                position="start">lv.</InputAdornment>}
                                                             label="Price"
                                                         />
                                                     </FormControl>
 
                                                     <FormControl fullWidth sx={{mb: 2}}>
-                                                        <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
+                                                        <InputLabel
+                                                            htmlFor="outlined-adornment-amount">Amount</InputLabel>
                                                         <OutlinedInput
                                                             id="outlined-adornment-amount"
-                                                            startAdornment={<InputAdornment position="start">kg.</InputAdornment>}
+                                                            startAdornment={<InputAdornment
+                                                                position="start">kg.</InputAdornment>}
                                                             label="Amount"
                                                             name='amount'
                                                         />
@@ -233,7 +243,16 @@ function SinglePosterView() {
                                                                    id='description'
                                                                    variant="outlined" multiline required/>
                                                     </FormControl>
-                                                    <Button type={"submit"} color='success' variant="contained"> Submit </Button>
+                                                    <input
+                                                        name="document"
+                                                        type="file"
+                                                        accept="image/*"
+                                                        multiple
+                                                        required={true}
+                                                        // onChange={handleImageChange}
+                                                    />
+                                                    <Button type={"submit"} color='success'
+                                                            variant="contained"> Submit </Button>
                                                 </form>
                                             </div>
                                         }
